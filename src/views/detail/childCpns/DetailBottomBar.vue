@@ -27,7 +27,7 @@ export default {
   name: 'DetailBottomBar',
   methods: {
     addTo(){
-      this.$emit('addToCart')
+      this.$emit('chooseStyle')
     }
   }
 }
@@ -47,7 +47,7 @@ export default {
     font-weight: 600;
     box-shadow: 0 -1px 1px 1px rgba(0, 0, 0, .05);
 
-    z-index: 99;
+    z-index: 19;
   }
 
   .left-bar {

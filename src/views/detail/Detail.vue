@@ -12,7 +12,11 @@
       <goods-list :goods="detailRecommend"/>
     </scroll>
     <top-back v-show="showBack" @click.native="backClick"/>
-    <detail-bottom-bar @addToCart="addToCart"/>
+    <detail-bottom-bar @chooseStyle="chooseStyle"/>
+    <choose-bar :chooseBarInfo="chooseBarInfo" 
+                v-show="showChooseBar" 
+                @addToCart="addToCart"
+                @cancelShowChoose="cancelShowChoose"/>
     <toast :message="message" :isShow="isShow"/>
   </div>
 </template>
@@ -25,6 +29,7 @@ import DetailImage from './childCpns/DetailImage'
 import DetailParam from './childCpns/DetailParam'
 import DetailCommentInfo from './childCpns/DetailCommentInfo'
 import DetailBottomBar from './childCpns/DetailBottomBar'
+import ChooseBar from './childCpns/ChooseBar'
 
 import DetailSwiper from '@/components/common/swiper/DetailSwiper.vue'
 import Scroll from '@/components/common/scroll/Scroll'
@@ -48,7 +53,8 @@ export default {
     DetailCommentInfo,
     GoodsList,
     DetailBottomBar,
-    Toast,
+    ChooseBar,
+    Toast
   },
   data(){
     return {
@@ -66,6 +72,8 @@ export default {
       currentIndex: null,
       message: '',
       isShow: false,
+      chooseBarInfo: {},
+      showChooseBar: false
     }
   },
   mixins: [itemImageListenerMixin, backTopMixin],
@@ -76,6 +84,7 @@ export default {
     //2.根据iid请求详情页数据
     getDetail(this.iid).then(res => {
       const data = res.result
+      console.log(data)
 
       //2.1 获取轮播图数据
       this.itemList = res.result.itemInfo.topImages
@@ -95,6 +104,9 @@ export default {
 
       //2.6 获取评价信息
       this.detailComment = new DetailComment(data.rate.cRate, data.rate.list)
+
+      //2.7 获取点击购物车后显示的chooseBar数据
+      this.chooseBarInfo = data.skuInfo
 
     })
 
@@ -145,20 +157,36 @@ export default {
       }
     },
 
-    //4.监听“加入购物车”的点击
+    //4.监听“加入购物车”按钮的点击 ->显示chooseBar
+    chooseStyle(){
+      //显示chooseBar
+      this.showChooseBar = true
+    },
+
+    //5.监听chooseBar的“确定”按钮点击
     addToCart(){
+
       const product = {}
-      //注意一定要传递iid -> 是商品的唯一标识
+      //5.1注意一定要传递iid -> 是商品的唯一标识
       product.iid = this.iid
       product.title = this.goods.title
       product.price = this.goods.price
       product.image = this.detailImages.detailImage[0].list[0]
 
-      //传递给mutations更改state
+      //5.2收起chooseBar
+      this.showChooseBar = false
+
+      //5.3传递给mutations更改state
       this.$store.dispatch('addCart', product).then(res => {
         this.$toast.show(res, 2000)
       })
+    },
+
+    //6.监听chooseBar的“取消”监听
+    cancelShowChoose(){
+      this.showChooseBar = false
     }
+    
   }
 }
 </script>

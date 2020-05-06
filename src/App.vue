@@ -24,6 +24,6 @@ import mainTabBar from './components/content/mainTabBar/MainTabBar'
   .tab-bar {
     font-size: 12px;
     background-color: #f9f9f9;
-    z-index: 99;
+    z-index: 10;
   }
 </style>
