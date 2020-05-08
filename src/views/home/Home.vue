@@ -11,6 +11,7 @@
             :probeType="3" @scroll="scrollListen"
             :pullUpLoad="true" @pullingUp="loadMore"
             :data="showGoodsList">
+      <search-bar class="search-bar" />
       <home-swiper :swiper-list="banners" @swiperImgLoad="swiperImgLoad"></home-swiper>
       <recommend-view :recommends="recommends"/>
       <feature-view/>
@@ -32,6 +33,7 @@ import TabControl from '@/components/content/TabControl'
 import GoodsList from '@/components/content/goodsList/GoodsList'
 // import TopBack from '@/components/content/TopBack'
 
+import SearchBar from './childComps/SearchBar'
 import RecommendView from './childComps/RecommendView'
 import FeatureView from './childComps/FeatureView'
 
@@ -44,6 +46,7 @@ export default {
   components: {
     NavBar,
     Scroll,
+    SearchBar,
     HomeSwiper,
     TabControl,
     RecommendView,
@@ -208,6 +211,9 @@ export default {
     right:0;
 
     z-index: 9;
+  }
+  .search-bar {
+    height: 45px;
   }
 
 
